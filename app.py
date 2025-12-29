@@ -47,11 +47,12 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'rental-mobil-secret-key-2024-change-in-production'
     
     # Database Configuration
-    DB_HOST = os.environ.get('DB_HOST', 'tt90ev.h.filess.io')
-    DB_USER = os.environ.get('DB_USER', 'rental_mobil_highmagnet')
-    DB_PASSWORD = os.environ.get('DB_PASSWORD', '611d7f213d24b2de4ab04ea76656d6813357eea6')
-    DB_NAME = os.environ.get('DB_NAME', 'rental_mobil_highmagnet')
-    DB_PORT = int(os.environ.get('DB_PORT', 3307))
+    DB_HOST = os.environ.get('DB_HOST', 'cloudc.mysql.database.azure.com')
+    DB_USER = os.environ.get('DB_USER', 'cloudc')
+    DB_PASSWORD = os.environ.get('DB_PASSWORD', '{Vallenlistrik1}')
+    DB_NAME = os.environ.get('DB_NAME', '{cloudc}')
+    DB_PORT = int(os.environ.get('DB_PORT', 3306))
+    DB_SSL_CA = os.environ.get('DB_SSL_CA', '{ca-cert filename}')
     
     # File Upload Configuration
     UPLOAD_FOLDER = 'static/uploads'
@@ -2597,3 +2598,4 @@ if __name__ == '__main__':
             port=5000, 
 
             )
+
