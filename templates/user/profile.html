@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}Profil Saya - Rental Mobil{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Sidebar Menu -->
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Menu Pengguna</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{{ url_for('user_dashboard') }}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                    </a>
+                    <a href="{{ url_for('user_profile') }}" class="list-group-item list-group-item-action active">
+                        <i class="fas fa-user me-2"></i>Profil Saya
+                    </a>
+                    <a href="{{ url_for('user_orders') }}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-history me-2"></i>Riwayat Pesanan
+                    </a>
+                    <a href="{{ url_for('payment_history') }}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-credit-card me-2"></i>Riwayat Pembayaran
+                    </a>
+                    <a href="https://wa.me/{{ whatsapp_number }}" target="_blank" class="list-group-item list-group-item-action">
+                        <i class="fab fa-whatsapp me-2 text-success"></i>Chat Admin
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="list-group-item list-group-item-action text-danger">
+                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <!-- Profile Content -->
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-user me-2"></i>Profil Saya</h4>
+                </div>
+                <div class="card-body">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form method="POST" action="{{ url_for('user_profile') }}" enctype="multipart/form-data">
+                        <div class="row mb-4">
+                            <div class="col-md-3 text-center">
+                                <div class="profile-picture-container mb-3">
+                                    {% if user.foto_profil %}
+                                        <img src="{{ url_for('serve_upload', filename='profiles/' + user.foto_profil) }}" 
+                                             alt="Foto Profil" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                                    {% else %}
+                                        <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" 
+                                             style="width: 150px; height: 150px; margin: 0 auto;">
+                                            <i class="fas fa-user text-white" style="font-size: 60px;"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="mb-3">
+                                    <label for="foto_profil" class="form-label">Ubah Foto Profil</label>
+                                    <input type="file" class="form-control" id="foto_profil" name="foto_profil" accept="image/*">
+                                    <small class="text-muted">Maksimal 2MB, format: JPG, PNG, GIF</small>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="nama" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="nama" name="nama" value="{{ user.nama }}" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" value="{{ user.email }}" disabled>
+                                        <small class="text-muted">Email tidak dapat diubah</small>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="nik" class="form-label">NIK</label>
+                                        <input type="text" class="form-control" id="nik" value="{{ user.nik }}" disabled>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="no_telepon" class="form-label">No. Telepon <span class="text-danger">*</span></label>
+                                        <input type="tel" class="form-control" id="no_telepon" name="no_telepon" value="{{ user.no_telepon }}" required>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="alamat" class="form-label">Alamat <span class="text-danger">*</span></label>
+                                    <textarea class="form-control" id="alamat" name="alamat" rows="3" required>{{ user.alamat }}</textarea>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
+                                        <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir" value="{{ user.tanggal_lahir }}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Status Akun</label>
+                                        <input type="text" class="form-control" value="{{ 'Aktif' if user.status == 'active' else 'Nonaktif' }}" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Tanggal Bergabung</label>
+                                        <input type="text" class="form-control" value="{{ user.created_at.strftime('%d %B %Y') if user.created_at else '-' }}" disabled>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Login Terakhir</label>
+                                        <input type="text" class="form-control" value="{{ user.last_login.strftime('%d %B %Y %H:%M') if user.last_login else '-' }}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Simpan Perubahan
+                            </button>
+                            <a href="{{ url_for('user_dashboard') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Kembali ke Dashboard
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Account Security Section -->
+            <div class="card mt-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="fas fa-shield-alt me-2"></i>Keamanan Akun</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Untuk mengubah password, silakan hubungi admin melalui WhatsApp atau email.
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="https://wa.me/{{ whatsapp_number }}" target="_blank" class="btn btn-success">
+                            <i class="fab fa-whatsapp me-2"></i>Hubungi Admin via WhatsApp
+                        </a>
+                        <a href="mailto:admin@rental.com" class="btn btn-primary">
+                            <i class="fas fa-envelope me-2"></i>Kirim Email
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Preview image before upload
+    document.getElementById('foto_profil').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.querySelector('.profile-picture-container img');
+                if (preview) {
+                    preview.src = e.target.result;
+                } else {
+                    const container = document.querySelector('.profile-picture-container');
+                    container.innerHTML = `<img src="${e.target.result}" alt="Preview" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">`;
+                }
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+{% endblock %}
