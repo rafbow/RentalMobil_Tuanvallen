@@ -51,8 +51,6 @@ class Config:
     DB_USER = os.environ.get('DB_USER', 'cloudc')
     DB_PASSWORD = os.environ.get('DB_PASSWORD', '{Vallenlistrik1}')
     DB_NAME = os.environ.get('DB_NAME', '{cloudc}')
-    DB_PORT = int(os.environ.get('DB_PORT', 3306))
-    DB_SSL_CA = os.environ.get('DB_SSL_CA', '{ca-cert filename}')
     
     # File Upload Configuration
     UPLOAD_FOLDER = 'static/uploads'
@@ -2598,4 +2596,5 @@ if __name__ == '__main__':
             port=5000, 
 
             )
+
 
