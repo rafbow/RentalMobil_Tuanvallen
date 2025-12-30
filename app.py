@@ -49,8 +49,8 @@ class Config:
     # Database Configuration
     DB_HOST = os.environ.get('DB_HOST', 'cloudc.mysql.database.azure.com')
     DB_USER = os.environ.get('DB_USER', 'cloudc')
-    DB_PASSWORD = os.environ.get('DB_PASSWORD', '{Vallenlistrik1}')
-    DB_NAME = os.environ.get('DB_NAME', '{cloudc}')
+    DB_PASSWORD = os.environ.get('DB_PASSWORD', 'Vallenlistrik1')
+    DB_NAME = os.environ.get('DB_NAME', 'rental_mobil')
     
     # File Upload Configuration
     UPLOAD_FOLDER = 'static/uploads'
@@ -2596,5 +2596,6 @@ if __name__ == '__main__':
             port=5000, 
 
             )
+
 
 
